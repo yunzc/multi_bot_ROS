@@ -85,6 +85,7 @@ if __name__ == '__main__':
                 command = message.split()
                 cmd_spd = float(command[0])
                 cmd_angv = float(command[1])
+                drive(cmd_spd, cmd_angv)
             # else:
             #     message = sys.stdin.readline()
             #     server.send(message.encode('utf-8'))
