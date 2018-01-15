@@ -74,6 +74,7 @@ if __name__ == '__main__':
     Port = int(sys.argv[2])
     server.connect((IP_address, Port))
 
+    drive(1, 0.5)
     while True:
         # maintains a list of possible input streams
         sockets_list = [sys.stdin, server]
