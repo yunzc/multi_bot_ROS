@@ -11,6 +11,8 @@ import Adafruit_PCA9685
 import numpy as np 
 
 import sys
+import socket
+import select
 
 # Initialise the PCA9685 using the default address (0x40) i2c
 pwm = Adafruit_PCA9685.PCA9685()
