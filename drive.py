@@ -75,20 +75,20 @@ if __name__ == '__main__':
 
     while True:
         # maintains a list of possible input streams
-        sockets_list = [sys.stdin, self.server]
+        sockets_list = [sys.stdin, server]
 
         read_sockets, write_socket, error_socket = select.select(sockets_list,[],[])
      
         for socks in read_sockets:
-            if socks == self.server:
+            if socks == server:
                 message = socks.recv(2048)
                 command = message.split()
                 cmd_spd = float(command[0])
                 cmd_angv = float(command[1])
             # else:
             #     message = sys.stdin.readline()
-            #     self.server.send(message.encode('utf-8'))
+            #     server.send(message.encode('utf-8'))
             #     sys.stdout.write("<You> ")
             #     sys.stdout.write(message)
             #     sys.stdout.flush()
-    self.server.close()
+    server.close()
