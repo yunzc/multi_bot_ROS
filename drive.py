@@ -21,11 +21,12 @@ pwm = Adafruit_PCA9685.PCA9685()
 #pwm = Adafruit_PCA9685.PCA9685(address=0x41, busnum=2)
 
 # Configure servo pulse lengths for rotating speed 
-stationary = 375 # corresponds to 90 degrees: stationary 
+right_stationary = 391 # corresponds to 90 degrees: stationary 
+left_stationary = 390
 max_pulse = 600 # Max pulse length out of 4096
 min_pulse = 150 # Min pulse length out of 4096
-right_forward = 1
-right_reverse = -1
+right_forward = -1
+right_reverse = 1
 left_forward = 1
 left_reverse = -1 
 
