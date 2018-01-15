@@ -52,15 +52,16 @@ pwm.set_pwm_freq(60)
 def drive(speed, ang_vel):
     # let's say the max is 2m/s 
     # set forward first 
-    right_pulse = speed/max_speed*(max_pulse - stationary)*right_forward + stationary
-    left_pulse = speed/max_speed*(max_pulse - stationary)*left_forward + stationary
+    right_pulse = int(speed/max_speed*(max_pulse - stationary)*right_forward + stationary)
+    left_pulse = int(speed/max_speed*(max_pulse - stationary)*left_forward + stationary)
     # positive ang_vel: turn left 
     # negative ang_vel: turn right 
-    pulse_diff = (max_pulse - stationary)*ang_vel/max_angv
+    pulse_diff = int((max_pulse - stationary)*ang_vel/max_angv)
     if pulse_diff > 0:
         left_pulse -= pulse_diff
     else:
         right_pulse += pulse_diff
+    print(right_pulse, left_pulse)
     pwm.set_pwm(right_channel, 0, right_pulse)
     pwm.set_pwm(left_channel, 0, left_pulse)
 
