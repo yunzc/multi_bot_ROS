@@ -21,8 +21,8 @@ pwm = Adafruit_PCA9685.PCA9685()
 #pwm = Adafruit_PCA9685.PCA9685(address=0x41, busnum=2)
 
 # Configure servo pulse lengths for rotating speed 
-right_stationary = 391 # corresponds to 90 degrees: stationary 
-left_stationary = 390
+r_stationary = 391 # corresponds to 90 degrees: stationary 
+l_stationary = 390
 max_pulse = 600 # Max pulse length out of 4096
 min_pulse = 150 # Min pulse length out of 4096
 right_forward = -1
@@ -53,11 +53,11 @@ pwm.set_pwm_freq(60)
 def drive(speed, ang_vel):
     # let's say the max is 2m/s 
     # set forward first 
-    right_pulse = int(speed/max_speed*(max_pulse - stationary)*right_forward + stationary)
-    left_pulse = int(speed/max_speed*(max_pulse - stationary)*left_forward + stationary)
+    right_pulse = int(speed/max_speed*(max_pulse - r_stationary)*right_forward + r_stationary)
+    left_pulse = int(speed/max_speed*(max_pulse - l_stationary)*left_forward + l_stationary)
     # positive ang_vel: turn left 
     # negative ang_vel: turn right 
-    pulse_diff = int((max_pulse - stationary)*ang_vel/max_angv)
+    pulse_diff = int((max_pulse - r_stationary)*ang_vel/max_angv)
     if pulse_diff > 0:
         left_pulse -= pulse_diff
     else:
