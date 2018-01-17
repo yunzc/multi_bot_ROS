@@ -16,6 +16,7 @@ import select
 
 
 vehicle_id = '2'
+vehicle_r = 0.0475 # (m) vehicle radius 
 # Initialise the PCA9685 using the default address (0x40) i2c
 pwm = Adafruit_PCA9685.PCA9685()
 
@@ -52,18 +53,16 @@ def set_servo_pulse(channel, pulse):
 pwm.set_pwm_freq(60)
 
 
-def drive(speed, ang_vel):
-    # let's say the max is 2m/s 
-    # set forward first 
-    right_pulse = int(speed/max_speed*(max_pulse - r_stationary)*right_forward + r_stationary)
-    left_pulse = int(speed/max_speed*(max_pulse - l_stationary)*left_forward + l_stationary)
+def drive(forward_vel, ang_vel):
+    # let's say the max is 2m/s
+    # first find desired vel for wach wheel 
+    right_vel = forward_vel + ang_vel*vehicle_r
+    left_vel = forward_vel - ang_vel*vehicle_r
+    # set pulse
+    right_pulse = int(right_vel/max_speed*(max_pulse - r_stationary)*right_forward + r_stationary)
+    left_pulse = int(left_vel/max_speed*(max_pulse - l_stationary)*left_forward + l_stationary)
     # positive ang_vel: turn left 
     # negative ang_vel: turn right 
-    pulse_diff = int((max_pulse - r_stationary)*ang_vel/max_angv)
-    if pulse_diff > 0:
-        left_pulse -= pulse_diff
-    else:
-        right_pulse += pulse_diff
     print(right_pulse, left_pulse)
     pwm.set_pwm(right_channel, 0, right_pulse)
     pwm.set_pwm(left_channel, 0, left_pulse)
@@ -92,7 +91,9 @@ if __name__ == '__main__':
         sockets_list = [sys.stdin, server]
 
         read_sockets, write_socket, error_socket = select.select(sockets_list,[],[])
-     
+        
+        print("listening and executing")
+        
         for socks in read_sockets:
             if socks == server:
                 message = socks.recv(2048)
@@ -100,5 +101,5 @@ if __name__ == '__main__':
                 cmd_spd = float(command[0])
                 cmd_angv = float(command[1])
                 drive(cmd_spd, cmd_angv)
-
+    print("Disconnecting...")
     server.close()
