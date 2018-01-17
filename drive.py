@@ -14,6 +14,8 @@ import sys
 import socket
 import select
 
+
+vehicle_id = '2'
 # Initialise the PCA9685 using the default address (0x40) i2c
 pwm = Adafruit_PCA9685.PCA9685()
 
@@ -75,7 +77,16 @@ if __name__ == '__main__':
     Port = int(sys.argv[2])
     server.connect((IP_address, Port))
 
-    drive(1, 0.5)
+    # drive(1, 0.5)
+    connected = False
+    while not connected:
+        server.send(vehicle_id.encode('utf-8'))
+        message = server.recv(2048)
+        if message == "Connected to server":
+            connected = True
+            
+    print("connected")
+
     while True:
         # maintains a list of possible input streams
         sockets_list = [sys.stdin, server]
@@ -89,10 +100,5 @@ if __name__ == '__main__':
                 cmd_spd = float(command[0])
                 cmd_angv = float(command[1])
                 drive(cmd_spd, cmd_angv)
-            # else:
-            #     message = sys.stdin.readline()
-            #     server.send(message.encode('utf-8'))
-            #     sys.stdout.write("<You> ")
-            #     sys.stdout.write(message)
-            #     sys.stdout.flush()
+
     server.close()
